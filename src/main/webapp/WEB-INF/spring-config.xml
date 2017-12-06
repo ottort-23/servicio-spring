@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util" 
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+    <context:component-scan base-package="gt.gob.mspas.roosvelt" />
+    <mvc:annotation-driven />
+        
+    <!--saho_consultas 192.168.50.83:5432   Otto    usr_hospitales
+    jdbc:sqlserver://SAHODB;databaseName=SAHO sigsaconsulta Consulta*2k
+    jdbc:sqlserver://OTTO-LENOVO\SALOMON_V2;databaseName=SAHO sa Admin@1-->
+
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+        <property name="url" value="jdbc:sqlserver://DBSERVER;databaseName=BD_HR" />
+        <property name="username" value="usr_roosevelt" />
+        <property name="password" value="112017Roosevelt" />
+    </bean>
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="annotatedClasses">
+            <list>
+                <value>gt.gob.mspas.roosvelt.entity.ERPDepartamento</value>
+                <value>gt.gob.mspas.roosvelt.entity.ERPEstadoCivil</value>
+                <value>gt.gob.mspas.roosvelt.entity.ERPGrupoEtnico</value>
+                <value>gt.gob.mspas.roosvelt.entity.ERPPais</value>
+                <value>gt.gob.mspas.roosvelt.entity.ERPPersona</value>
+                <value>gt.gob.mspas.roosvelt.entity.ERPPersonaPK</value>
+                <value>gt.gob.mspas.roosvelt.entity.ERPProfesion</value>
+                <value>gt.gob.mspas.roosvelt.entity.SARRHHSexo</value>
+                <value>gt.gob.mspas.roosvelt.entity.SADPaciente</value>
+                <value>gt.gob.mspas.roosvelt.entity.SADPacientePK</value>
+                <value>gt.gob.mspas.roosvelt.entity.ERPMunicipio</value>
+                <value>gt.gob.mspas.roosvelt.entity.ERPTipoIdentificacion</value>
+                <value>gt.gob.mspas.roosvelt.entity.ERPIdentificacion</value>
+                <value>gt.gob.mspas.roosvelt.entity.ERPIdentificacionPK</value>
+               
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="txManager"
+          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    
+    <mvc:view-controller path="/" view-name="index"/>
+    
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    
+     
+
+    <bean id="persistenceExceptionTranslationPostProcessor"
+          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+    <!--//Imlementaciones ===========================================================================================-->
+   
+    <bean id="personaServices" class="gt.gob.mspas.roosvelt.impl.PersonaImpl"></bean>
+   
+</beans>
